@@ -6,7 +6,7 @@
   <div class="loading-spinner-container">
     <div class="loading-spinner"></div>
     <p class="loading-text">Congratulations, You Did It!</p>
-    <p class="loading-subtext">Your changes have been successfully deployed. Ade Kurniawan</p>
+    <p class="loading-subtext">Your changes have been successfully deployed. Ade Kurniawan. v2</p>
   </div>
 </template>
 
