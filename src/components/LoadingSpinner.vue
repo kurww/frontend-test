@@ -9,8 +9,6 @@
     <p class="loading-text">playing now</p>
     <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" height="175" style="width:100%;max-width:660px;overflow:hidden;border-radius:10px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/id/song/menghancurkan/1760139686"></iframe>
     <p class="loading-subtext">Your changes have been successfully deployed. Ade Kurniawan. v2</p>
-
-    <iframe width="1265" height="496" src="https://www.youtube.com/embed/dQw4w9WgXcQ?list=RDdQw4w9WgXcQ" title="Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
   </div>
 </template>
 
