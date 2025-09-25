@@ -4,13 +4,13 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/kurww/nextjs-ai-chatbot.git'
+                git branch: 'dev/actions', url: 'https://github.com/kurww/frontend-test.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t nextjs-ai-chatbot:latest .'
+                sh 'docker build -t frontend-test:latest .'
             }
         }
 
@@ -18,7 +18,7 @@ pipeline {
             steps {
                 sh '''
                     docker rm -f nextjs-chatbot || true
-                    docker run -d --name nextjs-chatbot -p 3000:3000 nextjs-ai-chatbot:latest
+                    docker run -d --name frontend-test -p 3000:3000 frontend-test:latest
                 '''
             }
         }
