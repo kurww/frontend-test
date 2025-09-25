@@ -17,7 +17,7 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 sh '''
-                    docker rm -f nextjs-chatbot || true
+                    docker rm -f frontend-test || true
                     docker run -d --name frontend-test -p 3000:80 frontend-test:latest
                 '''
             }
