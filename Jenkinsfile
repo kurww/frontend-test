@@ -18,7 +18,7 @@ pipeline {
             steps {
                 sh '''
                     docker rm -f nextjs-chatbot || true
-                    docker run -d --name frontend-test -p 3000:3000 frontend-test:latest
+                    docker run -d --name frontend-test -p 3000:80 frontend-test:latest
                 '''
             }
         }
