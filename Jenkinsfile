@@ -4,20 +4,28 @@ pipeline {
     environment {
         DOCKER_IMAGE   = "frontend-test"
         DOCKERHUB_REPO = "adkurnwn/frontend-test"
-        BUILD_TAG      = "dev-actions-jenkins-${env.BUILD_NUMBER}"  // unique per Jenkins build
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'dev/actions', url: 'https://github.com/kurww/frontend-test.git'
+                git branch: 'staging', url: 'https://github.com/kurww/frontend-test.git'
+                
+                // git sha
+                script {
+                    env.GIT_COMMIT = sh(
+                        script: "git rev-parse --short HEAD",
+                        returnStdout: true
+                    ).trim()
+                }
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 sh '''
-                    docker build -t $DOCKER_IMAGE:latest -t $DOCKER_IMAGE:$BUILD_TAG .
+                    docker build \
+                        -t $DOCKER_IMAGE:$GIT_COMMIT .
                 '''
             }
         }
@@ -28,9 +36,9 @@ pipeline {
                     sh '''
                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                         
-                        docker tag $DOCKER_IMAGE:$BUILD_TAG $DOCKERHUB_REPO:$BUILD_TAG
-
-                        docker push $DOCKERHUB_REPO:$BUILD_TAG
+                        docker tag $DOCKER_IMAGE:$GIT_COMMIT $DOCKERHUB_REPO:$GIT_COMMIT
+                        docker push $DOCKERHUB_REPO:$GIT_COMMIT
+                        
                     '''
                 }
             }
