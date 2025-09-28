@@ -1,6 +1,12 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_IMAGE   = "frontend-test"
+        DOCKERHUB_REPO = "adkurnwn/frontend-test"
+        BUILD_TAG      = "dev-actions-jenkins-${env.BUILD_NUMBER}"  // unique per Jenkins build
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -10,16 +16,25 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t frontend-test:latest .'
+                sh '''
+                    docker build -t $DOCKER_IMAGE:latest -t $DOCKER_IMAGE:$BUILD_TAG .
+                '''
             }
         }
 
-        stage('Run Docker Container') {
+        stage('Push to Docker Hub') {
             steps {
-                sh '''
-                    docker rm -f frontend-test || true
-                    docker run -d --name frontend-test -p 3000:80 frontend-test:latest
-                '''
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        
+                        docker tag $DOCKER_IMAGE:latest $DOCKERHUB_REPO:latest
+                        docker tag $DOCKER_IMAGE:$BUILD_TAG $DOCKERHUB_REPO:$BUILD_TAG
+
+                        docker push $DOCKERHUB_REPO:latest
+                        docker push $DOCKERHUB_REPO:$BUILD_TAG
+                    '''
+                }
             }
         }
     }
