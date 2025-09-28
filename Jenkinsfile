@@ -11,12 +11,19 @@ pipeline {
             steps {
                 git branch: 'staging', url: 'https://github.com/kurww/frontend-test.git'
                 
-                // git sha
                 script {
-                    env.GIT_COMMIT = sh(
-                        script: "git rev-parse --short HEAD",
+                    env.GIT_BRANCH = sh(
+                        script: "git rev-parse --abbrev-ref HEAD",
                         returnStdout: true
                     ).trim()
+
+                    //SHA
+                    env.GIT_COMMIT = sh(
+                        script: "git rev-parse HEAD",
+                        returnStdout: true
+                    ).trim()
+
+                    env.IMAGE_TAG = "${env.GIT_BRANCH}-${env.GIT_COMMIT}"
                 }
             }
         }
@@ -25,7 +32,7 @@ pipeline {
             steps {
                 sh '''
                     docker build \
-                        -t $DOCKER_IMAGE:$GIT_COMMIT .
+                        -t $DOCKER_IMAGE:$IMAGE_TAG .
                 '''
             }
         }
@@ -36,9 +43,8 @@ pipeline {
                     sh '''
                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                         
-                        docker tag $DOCKER_IMAGE:$GIT_COMMIT $DOCKERHUB_REPO:$GIT_COMMIT
-                        docker push $DOCKERHUB_REPO:$GIT_COMMIT
-                        
+                        docker tag $DOCKER_IMAGE:$IMAGE_TAG $DOCKERHUB_REPO:$IMAGE_TAG
+                        docker push $DOCKERHUB_REPO:$IMAGE_TAG
                     '''
                 }
             }
