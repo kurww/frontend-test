@@ -28,10 +28,8 @@ pipeline {
                     sh '''
                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                         
-                        docker tag $DOCKER_IMAGE:latest $DOCKERHUB_REPO:latest
                         docker tag $DOCKER_IMAGE:$BUILD_TAG $DOCKERHUB_REPO:$BUILD_TAG
 
-                        docker push $DOCKERHUB_REPO:latest
                         docker push $DOCKERHUB_REPO:$BUILD_TAG
                     '''
                 }
