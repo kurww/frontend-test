@@ -56,7 +56,8 @@ pipeline {
                         emoji = "❌"
                     }
 
-                    def message = """${emoji} Build Notification
+                    def message = """
+                                    ${emoji} Build Notification
                                     --------------------------------------
                                     Project: ${env.JOB_NAME}
                                     Branch: ${env.BRANCH_NAME}
@@ -64,7 +65,8 @@ pipeline {
                                     Build: #${env.BUILD_NUMBER}
                                     Status: *${statusMessage}*
                                     --------------------------------------
-                                    Check build log: ${env.BUILD_URL}""".stripIndent()
+                                    Check build log: ${env.BUILD_URL}
+                                  """.stripIndent()
 
                     sh """
                         curl -s -X POST https://api.telegram.org/bot\${TELEGRAM_BOT_ID}/sendMessage \\
