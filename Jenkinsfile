@@ -58,6 +58,7 @@ pipeline {
 
                     def message = """${emoji} Build Notification
                                     --------------------------------------
+                                    Project: ${env.JOB_NAME}
                                     Branch: ${env.BRANCH_NAME}
                                     Build: #${env.BUILD_NUMBER}
                                     Status: *${statusMessage}*
