@@ -40,6 +40,7 @@ pipeline {
     post {
         always {
             script {
+                def commitMessage = sh(script: 'git log -1 --pretty=%s', returnStdout: true).trim()
                 withCredentials([
                     string(credentialsId: 'telegram-bot-id', variable: 'TELEGRAM_BOT_ID'),
                     string(credentialsId: 'telegram-chat-id', variable: 'TELEGRAM_CHAT_ID'),
@@ -61,6 +62,7 @@ pipeline {
                                     --------------------------------------
                                     Project: ${env.JOB_NAME}
                                     Branch: ${env.BRANCH_NAME}
+                                    Commit: ${commitMessage}
                                     SHA: ${env.GIT_COMMIT}
                                     Build: #${env.BUILD_NUMBER}
                                     Status: *${statusMessage}*
