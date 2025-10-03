@@ -38,10 +38,10 @@ pipeline {
     }
 
     // NEW: Post-build actions for notifications
-    post { 
-        always { 
+    post {
+        always {
             script {
-                // Use withCredentials to securely fetch Telegram secrets
+                // Use withCredentials to securely fetch all Telegram secrets
                 withCredentials([
                     string(credentialsId: 'telegram-bot-id', variable: 'TELEGRAM_BOT_ID'),
                     string(credentialsId: 'telegram-chat-id', variable: 'TELEGRAM_CHAT_ID'),
@@ -50,7 +50,6 @@ pipeline {
                     def statusMessage
                     def emoji
 
-                    // Check the build status
                     if (currentBuild.currentResult == 'SUCCESS') {
                         statusMessage = "BERHASIL"
                         emoji = "✅"
@@ -59,7 +58,6 @@ pipeline {
                         emoji = "❌"
                     }
 
-                    // Construct the message
                     def message = """${emoji} Build Notification
                                     --------------------------------------
                                     Project: ${env.JOB_NAME}
@@ -68,14 +66,14 @@ pipeline {
                                     --------------------------------------
                                     Check build log: ${env.BUILD_URL}"""
 
-                    // Send the notification using a shell command
-                    sh '''
-                        curl -s -X POST https://api.telegram.org/bot${TELEGRAM_BOT_ID}/sendMessage \\
-                        -d chat_id=${TELEGRAM_CHAT_ID} \\
-                        -d message_thread_id=${TELEGRAM_TOPIC_ID} \\
+                    // FIX: Changed from ''' to """ to allow the ${message} variable to be inserted
+                    sh """
+                        curl -s -X POST https://api.telegram.org/bot\${TELEGRAM_BOT_ID}/sendMessage \\
+                        -d chat_id=\${TELEGRAM_CHAT_ID} \\
+                        -d message_thread_id=\${TELEGRAM_TOPIC_ID} \\
                         -d parse_mode=Markdown \\
-                        -d text="${message}"
-                    '''
+                        --data-urlencode "text=${message}"
+                    """
                 }
             }
         }
