@@ -64,7 +64,7 @@ pipeline {
                                     Build: #${env.BUILD_NUMBER}
                                     Status: *${statusMessage}*
                                     --------------------------------------
-                                    Check build log: ${env.BUILD_URL}"""
+                                    Check build log: ${env.BUILD_URL}""".stripIndent()
 
                     sh """
                         curl -s -X POST https://api.telegram.org/bot\${TELEGRAM_BOT_ID}/sendMessage \\
