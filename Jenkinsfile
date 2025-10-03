@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE   = "frontend-test"
         DOCKERHUB_REPO = "adkurnwn/frontend-test"
-        BUILD_TAG      = "dev-actions-${env.GIT_COMMIT}"  // unique per Jenkins build
+        BUILD_TAG      = "dev-actions-${env.GIT_COMMIT}"
     }
 
     stages {
@@ -17,7 +17,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh '''
-                    docker build -t $DOCKER_IMAGE:latest -t $DOCKER_IMAGE:$BUILD_TAG .
+                    docker build -t $DOCKER_IMAGE:$BUILD_TAG .
                 '''
             }
         }
