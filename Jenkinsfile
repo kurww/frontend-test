@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE   = "frontend-test"
         DOCKERHUB_REPO = "adkurnwn/frontend-test"
-        BUILD_TAG      = "dev-actions-jenkins-${env.BUILD_NUMBER}"  // unique per Jenkins build
+        BUILD_TAG      = "dev-actions-jenkins-${env.GIT_COMMIT}"  // unique per Jenkins build
     }
 
     stages {
