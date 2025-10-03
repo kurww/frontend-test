@@ -57,6 +57,7 @@ pipeline {
                         emoji = "❌"
                     }
 
+
                     def message = """
                                     ${emoji} Build Notification
                                     --------------------------------------
