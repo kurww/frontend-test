@@ -37,11 +37,9 @@ pipeline {
         }
     }
 
-    // NEW: Post-build actions for notifications
     post {
         always {
             script {
-                // Use withCredentials to securely fetch all Telegram secrets
                 withCredentials([
                     string(credentialsId: 'telegram-bot-id', variable: 'TELEGRAM_BOT_ID'),
                     string(credentialsId: 'telegram-chat-id', variable: 'TELEGRAM_CHAT_ID'),
@@ -60,13 +58,12 @@ pipeline {
 
                     def message = """${emoji} Build Notification
                                     --------------------------------------
-                                    Project: ${env.JOB_NAME}
+                                    Branch: ${env.BRANCH_NAME}
                                     Build: #${env.BUILD_NUMBER}
                                     Status: *${statusMessage}*
                                     --------------------------------------
                                     Check build log: ${env.BUILD_URL}"""
 
-                    // FIX: Changed from ''' to """ to allow the ${message} variable to be inserted
                     sh """
                         curl -s -X POST https://api.telegram.org/bot\${TELEGRAM_BOT_ID}/sendMessage \\
                         -d chat_id=\${TELEGRAM_CHAT_ID} \\
