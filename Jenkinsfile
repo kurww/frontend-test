@@ -60,6 +60,7 @@ pipeline {
                                     --------------------------------------
                                     Project: ${env.JOB_NAME}
                                     Branch: ${env.BRANCH_NAME}
+                                    SHA: ${env.GIT_COMMIT}
                                     Build: #${env.BUILD_NUMBER}
                                     Status: *${statusMessage}*
                                     --------------------------------------
